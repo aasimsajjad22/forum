@@ -30,7 +30,7 @@ class ParticipantForumTest extends TestCase
         $this->get($thread->path())
             ->assertSee($reply->body);
     }
-    
+
     function a_reply_requires_a_body()
     {
         $this->withExceptionHandling()->signIn();
