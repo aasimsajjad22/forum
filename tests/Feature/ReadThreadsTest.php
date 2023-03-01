@@ -52,4 +52,17 @@ class ReadThreadsTest extends TestCase
             ->assertDontSee($threadNotInChannel->title);
     }
 
+    /** @test  */
+    function a_user_can_filter_threads_by_username()
+    {
+        $this->signIn(create('App\User', ['name' => 'aasim']));
+
+        $threadByAasim = create('App\Thread', ['user_id' => auth()->id()]);
+
+        $threadNotByAasim = create('App\Thread');
+
+        $this->get('/threads?by=aasim')
+            ->assertSee($threadByAasim->title)
+            ->assertDontSee($threadNotByAasim->title);
+    }
 }
