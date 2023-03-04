@@ -19,9 +19,14 @@ class Thread extends Model
             $builder->withCount('replies');
         });
 
-//        static::addGlobalScope('creator', function ($builder) {
-//            $builder->with('creator');
-//        });
+
+        static::deleting(function ($thread) {
+            $thread->replies()->delete();
+        });
+
+//      static::addGlobalScope('creator', function ($builder) {
+//          $builder->with('creator');
+//      });
     }
 
     public function path()
