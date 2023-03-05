@@ -22,7 +22,15 @@ class Thread extends Model
 
 
         static::deleting(function ($thread) {
-            $thread->replies()->delete();
+            //$thread->replies()->delete();
+
+            //$thread->replies->each(function ($reply) {
+            //    $reply->delete();
+            //});
+
+            $thread->replies->each->delete();
+
+
         });
 
 //      static::addGlobalScope('creator', function ($builder) {
@@ -48,6 +56,11 @@ class Thread extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function activity()
+    {
+        return $this->morphMany('App\Activity', 'subject');
     }
 
     public function addReply($reply)

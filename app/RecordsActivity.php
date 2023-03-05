@@ -13,16 +13,15 @@ trait RecordsActivity {
                 $model->recordActivity($event);
             });
         }
+
+        static::deleting(function ($model) {
+            $model->activity()->delete();
+        });
     }
 
     protected static function getActivitiesToRecord()
     {
         return ['created'];
-    }
-
-    public function activity()
-    {
-        return $this->morphMany('App\Activity', 'subject');
     }
 
     protected function getActivityType($event)

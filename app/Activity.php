@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use function foo\func;
 
 class Activity extends Model
 {

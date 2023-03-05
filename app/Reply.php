@@ -16,6 +16,12 @@ class Reply extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+
+    public function activity()
+    {
+        return $this->morphMany('App\Activity', 'subject');
+    }
+
     public function thread()
     {
         return $this->belongsTo(Thread::class);
