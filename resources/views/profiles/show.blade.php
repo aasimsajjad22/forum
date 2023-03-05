@@ -11,27 +11,17 @@
                     </h1>
                 </div>
 
-                @foreach($threads as $thread)
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div class="level">
-                        <span class="flex">
-                            <a href="#">{{ $thread->creator->name }}</a> posted:
-                            {{ $thread->title }}
-                        </span>
+                @foreach($activities as $date => $activity)
 
-                                <span>{{ $thread->created_at->diffForHumans() }}</span>
-                            </div>
-                        </div>
+                    <h3 class="page-header">{{ $date }}</h3>
+                    @foreach($activity as $record)
 
-                        <div class="panel-body">
-                            {{ $thread->body }}
-                        </div>
-                    </div>
+                        @include("profiles.activities.{$record->type}", ['activity' => $record])
+
+                    @endforeach
 
                 @endforeach
 
-                {{ $threads->links() }}
             </div>
         </div>
 
