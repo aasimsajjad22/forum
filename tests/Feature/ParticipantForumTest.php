@@ -42,4 +42,25 @@ class ParticipantForumTest extends TestCase
             ->assertSessionHasErrors('body');
     }
 
+    function unauthorized_users_cannot_delete_replies()
+    {
+        $reply = create('App\Reply');
+
+        $this->signIn()
+            ->delete("/replies/{$reply->id}")
+            ->assertStatus(403);
+    }
+
+    /** @test  */
+    function authorized_users_can_delete_replies()
+    {
+        $this->signIn();
+
+        $reply = create('App\Reply', ['user_id' => auth()->id()]);
+
+        $this->delete("/replies/{$reply->id}");
+
+        $this->assertDatabaseMissing('replies', ['id', $reply->id]);
+    }
+
 }
