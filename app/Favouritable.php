@@ -25,4 +25,26 @@ trait Favouritable {
     {
         return $this->morphMany(Favourite::class, 'favourited');
     }
+
+
+    /**
+     * Unfavorite the current reply.
+     */
+    public function unfavourite()
+    {
+        $attributes = ['user_id' => auth()->id()];
+
+        $this->favourites()->where($attributes)->delete();
+    }
+
+
+    /**
+     * Fetch the favorited status as a property.
+     *
+     * @return bool
+     */
+    public function getIsFavouritedAttribute()
+    {
+        return $this->isFavourited();
+    }
 }
