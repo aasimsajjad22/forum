@@ -3,6 +3,14 @@
 namespace App;
 trait Favouritable {
 
+
+    protected static function bootFavouritable()
+    {
+        static::deleting(function ($model) {
+            //$model->favourites()->delete();
+            $model->favourites->each->delete();
+        });
+    }
     public function favourite()
     {
         $attribute = ['user_id' => auth()->id()];
@@ -34,7 +42,10 @@ trait Favouritable {
     {
         $attributes = ['user_id' => auth()->id()];
 
-        $this->favourites()->where($attributes)->delete();
+        //$this->favourites()->where($attributes)->delete();
+        $this->favourites()->where($attributes)->each(function ($model) {
+            $model->delete();
+        });
     }
 
 
