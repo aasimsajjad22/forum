@@ -43,6 +43,12 @@ class Thread extends Model
         return "/threads/{$this->channel->slug}/{$this->id}";
     }
 
+    public function addReply($reply)
+    {
+        return $this->replies()->create($reply);
+    }
+
+    /**************   RELATIONSHIP METHODS    *********************/
     public function replies()
     {
         return $this->hasMany(Reply::class);
@@ -63,10 +69,26 @@ class Thread extends Model
         return $this->morphMany('App\Activity', 'subject');
     }
 
-    public function addReply($reply)
+    public function subscribe($userId = null)
     {
-        return $this->replies()->create($reply);
+        $this->subscriptions()->create([
+            'user_id' => $userId ?: auth()->id()
+        ]);
     }
+
+    public function unsubscribe($userId = null)
+    {
+        $this->subscriptions()
+            ->where('user_id', $userId ?: auth()->id())
+            ->delete();
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(ThreadSubscription::class);
+    }
+
+    /******************   QueryScopes    *********************/
 
     public function scopeFilter($query, $filters)
     {
