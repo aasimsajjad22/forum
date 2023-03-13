@@ -45,6 +45,14 @@ if (token) {
 window.Vue = require('vue');
 window.events = new Vue();
 
+Vue.prototype.authorize = function (handler) {
+    // Additional admin privileges here.
+    let user = window.App.user;
+
+    return user ? handler(user) : false;
+};
+
+
 // import Echo from 'laravel-echo'
 
 // window.Pusher = require('pusher-js');
