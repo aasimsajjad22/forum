@@ -91,6 +91,13 @@ class Thread extends Model
             ->notify($reply);
     }
 
+    public function hasUpdatesFor($user)
+    {
+        $key = $user->visitedThreadCacheKey($this);
+
+        return $this->updated_at > cache($key);
+    }
+
     /**************   RELATIONSHIP METHODS    *********************/
     public function replies()
     {

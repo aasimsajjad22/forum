@@ -15,4 +15,18 @@ class ReplyPolicy
     {
         return $user->id == $reply->user_id;
     }
+
+    /**
+     * Determine if the authenticated user has permission to create a new reply.
+     * @param  User $user
+     * @return bool
+     */
+    public function create(User $user)
+    {
+        if (! $lastReply = $user->fresh()->lastReply) {
+            return true;
+        }
+
+        return ! $lastReply->wasJustPublished();
+    }
 }
