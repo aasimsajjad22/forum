@@ -89,7 +89,7 @@ class ParticipantForumTest extends TestCase
         ]);
 
 
-        $this->post($thread->path() . '/replies', $reply->toArray())
+        $this->json('post', $thread->path() . '/replies', $reply->toArray())
             ->assertStatus(422);
     }
 
