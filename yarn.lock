@@ -1422,6 +1422,11 @@ async@^2.4.1, async@^2.6.4:
   dependencies:
     lodash "^4.17.14"
 
+at.js@^1.5.4:
+  version "1.5.4"
+  resolved "https://registry.npmjs.org/at.js/-/at.js-1.5.4.tgz"
+  integrity sha512-G8mgUb/PqShPoH8AyjuxsTGvIr1o716BtQUKDM44C8qN2W615y7KGJ68MlTGamd0J0D/m28emUkzagaHTdrGZw==
+
 atob@^2.1.2:
   version "2.1.2"
   resolved "https://registry.npmjs.org/atob/-/atob-2.1.2.tgz"
@@ -4318,7 +4323,12 @@ jest-worker@^25.4.0:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
 
-jquery@^3.2:
+jquery.caret@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.npmjs.org/jquery.caret/-/jquery.caret-0.3.1.tgz"
+  integrity sha512-nS2mjMZzP4e4tIOgeTLSs+jFhUsUVZUPgkUMpi4DlJq9SgKEg6w2jf7q8joMJp6v+voJHXrH8rzAnbyxWHwAeA==
+
+jquery@^3.2, "jquery@>=1.7.0 <4.0.0":
   version "3.6.4"
   resolved "https://registry.npmjs.org/jquery/-/jquery-3.6.4.tgz"
   integrity sha512-v28EW9DWDFpzcD9O5iyJXg3R3+q+mET5JhnjJzQUZMHOv67bpSIHq81GEYpPNZHG+XXHsfSme3nxp/hndKEcsQ==

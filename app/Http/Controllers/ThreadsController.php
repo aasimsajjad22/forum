@@ -22,8 +22,6 @@ class ThreadsController extends Controller
 
         $threads = $this->getThreads($filters, $channel);
 
-        $threads = $threads->get();
-
         if (request()->wantsJson()) {
             return $threads;
         }
@@ -84,7 +82,7 @@ class ThreadsController extends Controller
         if ($channel->exists) {
             $threads->where('channel_id', $channel->id);
         }
-        return $threads;
+        return $threads->paginate(10);
     }
 
     public function destroy($channelId, Thread $thread)
