@@ -6,6 +6,7 @@ use App\Channel;
 use App\Inspections\Spam;
 use App\Thread;
 use App\Filters\ThreadFilters;
+use App\Trending;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,7 @@ class ThreadsController extends Controller
         $this->middleware('auth')->except(['index', 'show']);
     }
 
-    public function index(Channel $channel, ThreadFilters $filters)
+    public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
     {
 
         $threads = $this->getThreads($filters, $channel);
@@ -26,7 +27,10 @@ class ThreadsController extends Controller
             return $threads;
         }
 
-        return view('threads.index', compact('threads'));
+        return view('threads.index', [
+            'threads' => $threads,
+            'trending' => $trending->get()
+        ]);
     }
 
     public function create()
@@ -54,13 +58,15 @@ class ThreadsController extends Controller
         return redirect($thread->path())->with('flash', 'Your thread has been published!');;
     }
 
-    public function show($channel, Thread $thread)
+    public function show($channel, Thread $thread, Trending $trending)
     {
 
         // record that user visited page
         if (auth()->check()) {
             auth()->user()->read($thread);
         }
+
+        $trending->push($thread);
 
         return view('threads.show', compact('thread'));
 
