@@ -17,6 +17,19 @@ class CreateThreadsTest extends TestCase
         $this->post('/threads', $thread->toArray());
     }
 
+    /** @test */
+    function new_users_must_first_confirm_their_email_address_before_creating_threads()
+    {
+        $user = factory('App\User')->states('unconfirmed')->create();
+
+        $this->signIn($user);
+
+        $thread = make('App\Thread');
+
+        $this->post(route('threads'), $thread->toArray())
+            ->assertRedirect(route('threads'))
+            ->assertSessionHas('flash', 'You must first confirm your email address.');
+    }
 
     function guest_cannot_see_create_thread_page()
     {
@@ -98,5 +111,13 @@ class CreateThreadsTest extends TestCase
         $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
 
+    }
+
+    /** @test */
+    function authenticated_users_must_first_confirm_their_email_address_before_creating_threads()
+    {
+        $this->publishThread()
+            ->assertRedirect('/threads')
+            ->assertSessionHas('flash', 'You must first confirm your email address.');
     }
 }
