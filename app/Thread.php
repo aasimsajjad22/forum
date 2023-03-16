@@ -20,6 +20,13 @@ class Thread extends Model
      */
     protected $appends = ['isSubscribedTo'];
 
+    /**
+     * The attributes that should be cast to native types.
+     */
+    protected $casts = [
+        'locked' => 'boolean'
+    ];
+
 
     public static function boot()
     {
@@ -199,6 +206,14 @@ class Thread extends Model
         $this->subscriptions()
             ->where('user_id', $userId ?: auth()->id())
             ->delete();
+    }
+
+    /**
+     * Lock the thread.
+     */
+    public function lock()
+    {
+        $this->update(['locked' => true]);
     }
 
     public function subscriptions()
