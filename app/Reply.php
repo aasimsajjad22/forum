@@ -31,7 +31,7 @@ class Reply extends Model
      *
      * @var array
      */
-    protected $appends = ['favouritesCount', 'isFavourited'];
+    protected $appends = ['favouritesCount', 'isFavourited', 'isBest'];
 
     /**
      * Determine if the reply was just published a moment ago.
@@ -68,6 +68,24 @@ class Reply extends Model
             '<a href="/profiles/$1">$0</a>',
             $body
         );
+    }
+
+    /**
+     * Determine if the current reply is marked as the best.
+     * @return bool
+     */
+    public function isBest()
+    {
+        return $this->thread->best_reply_id == $this->id;
+    }
+
+    /**
+     * Determine if the current reply is marked as the best.
+     * @return bool
+     */
+    public function getIsBestAttribute()
+    {
+        return $this->isBest();
     }
 
     public function owner()

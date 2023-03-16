@@ -15,6 +15,7 @@
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
 
+
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
@@ -31,6 +32,7 @@ $factory->state(App\User::class, 'unconfirmed', function () {
 });
 
 $factory->define(App\Thread::class, function ($faker) {
+    $title = $faker->sentence;
     return [
         'user_id' => function () {
             return factory('App\User')->create()->id;
@@ -38,8 +40,9 @@ $factory->define(App\Thread::class, function ($faker) {
         'channel_id' => function() {
             return factory('App\Channel')->create()->id;
         },
-        'title' => $faker->sentence,
+        'title' => $title,
         'body' => $faker->paragraph,
+        'slug' => str_slug($title)
     ];
 });
 

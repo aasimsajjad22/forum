@@ -52,10 +52,15 @@ class ThreadsController extends Controller
             'user_id' => auth()->id(),
             'channel_id' => request('channel_id'),
             'title' => request('title'),
-            'body' => request('body')
+            'body' => request('body'),
         ]);
 
-        return redirect($thread->path())->with('flash', 'Your thread has been published!');;
+
+        if (request()->wantsJson()) {
+            return response($thread, 201);
+        }
+
+        return redirect($thread->path())->with('flash', 'Your thread has been published!');
     }
 
     public function show($channel, Thread $thread, Trending $trending)

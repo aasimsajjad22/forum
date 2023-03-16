@@ -23,7 +23,7 @@ Route::get('/threads', 'ThreadsController@index')->name('threads');
 Route::get('/threads/create', 'ThreadsController@create');
 Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
 Route::Delete('/threads/{channel}/{thread}', 'ThreadsController@destroy');
-Route::post('threads', 'ThreadsController@store')->middleware('must-be-confirmed');
+Route::post('threads', 'ThreadsController@store');
 
 Route::get('/threads/{channel}', 'ThreadsController@index');
 
@@ -32,7 +32,7 @@ Route::get('/threads/{channel}', 'ThreadsController@index');
 Route::get('/threads/{channel}/{thread}/replies', 'RepliesController@index');
 Route::post('/threads/{channel}/{thread}/replies', 'RepliesController@store');
 Route::patch('/replies/{reply}', 'RepliesController@update');
-Route::delete('/replies/{reply}', 'RepliesController@destroy');
+Route::delete('/replies/{reply}', 'RepliesController@destroy')->name('replies.destroy');
 
 
 Route::post('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->middleware('auth');
@@ -50,3 +50,5 @@ Route::get('/register/confirm', 'Auth\RegisterConfirmationController@index')->na
 
 Route::get('api/users', 'Api\UsersController@index');
 Route::post('api/users/{user}/avatar', 'Api\UserAvatarController@store')->middleware('auth')->name('avatar');
+
+Route::post('/replies/{reply}/best', 'BestRepliesController@store')->name('best-replies.store');

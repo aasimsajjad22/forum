@@ -3308,11 +3308,6 @@ __webpack_require__.r(__webpack_exports__);
       body: ''
     };
   },
-  computed: {
-    signedIn: function signedIn() {
-      return window.App.signedIn;
-    }
-  },
   mounted: function mounted() {
     $('#body').atwho({
       at: "@",
@@ -3466,7 +3461,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       editing: false,
       id: this.data.id,
-      body: this.data.body
+      body: this.data.body,
+      isBest: this.data.isBest,
+      reply: this.data
     };
   },
   computed: {
@@ -3483,6 +3480,12 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   },
+  created: function created() {
+    var _this2 = this;
+    window.events.$on('best-reply-selected', function (id) {
+      _this2.isBest = id === _this2.id;
+    });
+  },
   methods: {
     update: function update() {
       axios.patch('/replies/' + this.data.id, {
@@ -3490,6 +3493,10 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         flash(error.response.data, 'danger');
       });
+    },
+    markBestReply: function markBestReply() {
+      axios.post('/replies/' + this.data.id + '/best');
+      window.events.$emit('best-reply-selected', this.data.id);
     },
     destroy: function destroy() {
       axios["delete"]('/replies/' + this.data.id);
@@ -3928,7 +3935,8 @@ var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "panel panel-default",
+    staticClass: "panel",
+    "class": _vm.isBest ? "panel-success" : "panel-default",
     attrs: {
       id: "reply-" + _vm.id
     }
@@ -3997,9 +4005,9 @@ var render = function render() {
     domProps: {
       innerHTML: _vm._s(_vm.body)
     }
-  })]), _vm._v(" "), _vm.canUpdate ? _c("div", {
+  })]), _vm._v(" "), _c("div", {
     staticClass: "panel-footer level"
-  }, [_c("button", {
+  }, [_vm.authorize("updateReply", _vm.reply) ? _c("div", [_c("button", {
     staticClass: "btn btn-xs mr-1",
     on: {
       click: function click($event) {
@@ -4011,7 +4019,18 @@ var render = function render() {
     on: {
       click: _vm.destroy
     }
-  }, [_vm._v("Delete")])]) : _vm._e()]);
+  }, [_vm._v("Delete")])]) : _vm._e(), _vm._v(" "), _c("button", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: !_vm.isBest,
+      expression: "! isBest"
+    }],
+    staticClass: "btn btn-xs btn-default ml-a",
+    on: {
+      click: _vm.markBestReply
+    }
+  }, [_vm._v("Best Reply?")])])]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -70194,6 +70213,22 @@ var app = new Vue({
 
 /***/ }),
 
+/***/ "./resources/assets/js/authorization.js":
+/*!**********************************************!*\
+  !*** ./resources/assets/js/authorization.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var user = window.App.user;
+module.exports = {
+  updateReply: function updateReply(reply) {
+    return reply.user_id === user.id;
+  }
+};
+
+/***/ }),
+
 /***/ "./resources/assets/js/bootstrap.js":
 /*!******************************************!*\
   !*** ./resources/assets/js/bootstrap.js ***!
@@ -70243,11 +70278,18 @@ if (token) {
  */
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 window.events = new Vue();
-Vue.prototype.authorize = function (handler) {
-  // Additional admin privileges here.
-  var user = window.App.user;
-  return user ? handler(user) : false;
+var authorizations = __webpack_require__(/*! ./authorization */ "./resources/assets/js/authorization.js");
+Vue.prototype.authorize = function () {
+  if (!window.App.signedIn) return false;
+  for (var _len = arguments.length, params = new Array(_len), _key = 0; _key < _len; _key++) {
+    params[_key] = arguments[_key];
+  }
+  if (typeof params[0] === 'string') {
+    return authorizations[params[0]](params[1]);
+  }
+  return params[0](window.App.user);
 };
+Vue.prototype.signedIn = window.App.signedIn;
 
 // import Echo from 'laravel-echo'
 
