@@ -21,12 +21,16 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/threads', 'ThreadsController@index')->name('threads');
 Route::get('/threads/create', 'ThreadsController@create');
+
+Route::get('/threads/search', 'SearchController@show');
+
 Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
 Route::patch('threads/{channel}/{thread}', 'ThreadsController@update');
 Route::Delete('/threads/{channel}/{thread}', 'ThreadsController@destroy');
 Route::post('threads', 'ThreadsController@store');
 
 Route::get('/threads/{channel}', 'ThreadsController@index');
+
 
 //Route::resource('threads', 'ThreadsController');
 

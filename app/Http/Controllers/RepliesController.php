@@ -87,6 +87,8 @@ class RepliesController extends Controller
 
         $reply->update(request(['body']));
 
+        //$reply->update(request()->validate(['body' => 'required|spamfree']));
+
 //        try {
 //            $this->validate(request(), ['body' => 'required|spamfree']);
 //

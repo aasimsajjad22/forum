@@ -30,6 +30,7 @@
         [v-cloak] { display: none; }
         .ml-a { margin-left: auto; }
         .level-item { margin-right: 1em; }
+        .ais-highlight > em { background: yellow; font-style: normal; }
     </style>
 
     @yield('head')
