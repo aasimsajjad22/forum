@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       editing: false,
-      id: this.id,
+      id: this.reply.id,
       body: this.reply.body,
       isBest: this.reply.isBest,
     };

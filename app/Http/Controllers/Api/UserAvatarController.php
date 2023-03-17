@@ -11,7 +11,7 @@ class UserAvatarController extends Controller
     {
         //dd(request()->all());
 
-        $this->validate(request(), [
+        request()->validate([
             'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:6000',
         ]);
 
